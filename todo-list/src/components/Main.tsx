@@ -16,9 +16,9 @@ export default function Main(props: IMainProps) {
     }
   }, []); //загружаю тудушки из стореджа при первой загрузке страницы
   const [todoValue, setTodoValue] = useState(''); //стейт для хранения значения в инпуте создания тудушки
-  const [widthValue, setWidthValue] = useState('25%') //стейт для хранения значения ширины секции со списком тудушек
+  const [widthValue, setWidthValue] = useState('25%'); //стейт для хранения значения ширины секции со списком тудушек
   const submitTodo = (todoValue: string) => { //функция для создания новой тудушки
-    if (todoValue === '') {
+    if (todoValue === '') { //если пользователь пытается создать тудушку с пустым именем, то выходим из функции
       return;
     }
     const newTodo = {
@@ -40,7 +40,7 @@ export default function Main(props: IMainProps) {
   });
 
   const editTodo = (id: string) => { //функция для перевода тудушки в режим редактирования
-    const todoForEdit = todos.find((todo) => todo.id === id)
+    const todoForEdit = todos.find((todo) => todo.id === id);
     if (todoForEdit) {
       setEditedTodo(todoForEdit);
     }
@@ -59,7 +59,7 @@ export default function Main(props: IMainProps) {
     }
   }
 
-  const onChangeStatus = (todo: ITodo, status: StatusType) => {
+  const onChangeStatus = (todo: ITodo, status: StatusType) => { //функция перевода тудушки из одного статуса в другой
     setTodos(todos.map((item) => {
       if (item.id === todo.id) {
         item.isCompleted = false;
@@ -68,7 +68,7 @@ export default function Main(props: IMainProps) {
         item[status] = !item[status];
       }
       return item;
-    }))
+    }));
   }
 
   const onApprove = (todo: ITodo) => {
@@ -77,15 +77,14 @@ export default function Main(props: IMainProps) {
         item.text = todo.text;
       }
       return item;
-    }))
+    }));
     setEditedTodo({
       id: '',
       text: '',
       isWaiting: false,
       isProgress: false,
       isCompleted: false
-    })
-
+    });
   }
   let mousedown: boolean = false; //переменная для определения, зажата ли кнопка мыши на диве с классом width-changing-slider
   const isMouseDown = (value: boolean) => {

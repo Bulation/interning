@@ -17,32 +17,8 @@ body {
   padding-bottom: 20px;
 }
 
-button {
-  padding: 10px;
-  cursor: pointer;
-  background: linear-gradient(90deg,
-          rgba(93, 12, 255, 1) 0%,
-          rgba(155, 0, 250, 1) 100%);
-  color: #fff;
-  margin-right: 10px;
-}
-
-.add-todo-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
 .header {
   padding: 20px;
-}
-
-.header__input {
-  margin: 20px auto;
-}
-
-.edit-todos__edit-input {
-  margin: 0 auto 20px;
 }
 
 input {
@@ -54,16 +30,44 @@ input {
   border-radius: 20px;
 }
 
+.header__input {
+  margin: 20px auto;
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+  margin: 20px 0;
+}
+
 .main {
   width: 99%;
   margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   position: relative;
 }
 
 .todos-section {
   width: 25%;
   border: 1px solid blue;
+}
+
+button {
+  padding: 10px;
+  cursor: pointer;
+  background: linear-gradient(90deg,
+      rgba(93, 12, 255, 1) 0%,
+      rgba(155, 0, 250, 1) 100%);
+  color: #fff;
+  margin-right: 10px;
+}
+
+.add-todo-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .todo {
@@ -73,22 +77,21 @@ input {
   padding: 10px;
 }
 
+.todo_isWaiting {
+  background-color: #666666;
+}
+
+.todo_isProgress {
+  background-color: #6699CC;
+}
+
+.todo_isCompleted {
+  background-color: #009933;
+}
+
 .todo__text {
   text-overflow: ellipsis;
   overflow: hidden;
-}
-.edit-todos {
-  width: 75%;
-  border: 1px solid blue;
-}
-
-.todo__edit-button {
-  margin-left: auto;
-}
-
-h1, h2, h3 {
-  text-align: center;
-  margin: 20px 0;
 }
 
 li {
@@ -102,4 +105,17 @@ li {
   height: 100%;
   width: 10px;
   transform: translate(-50%);
+}
+
+.edit-todos {
+  width: 75%;
+  border: 1px solid blue;
+}
+
+.edit-todos__edit-input {
+  margin: 0 auto 20px;
+}
+
+.todo__edit-button {
+  margin-left: auto;
 }

@@ -12,14 +12,23 @@ export default function EditingSection(props: IEditingSectionProps) {
     }
   })
   return (
-    <section ref={editingSection} className="edit-todos" style={{ width: `${100 - parseFloat(widthValue)}` }}>
+    <section ref={editingSection} className="edit-todos" style={{ width: `${100 - parseFloat(widthValue)}%` }}>
       <h2>Edit todo</h2>
       {
         todo.text && <div>
           <input className="edit-todos__edit-input" type="text" value={todo.text} onChange={(e) => setEditedTodo({ ...todo, text: e.target.value })} />
-          <button onClick={() => { onChangeStatus(todo, 'isWaiting'); onApprove(todo) }}>Move to Waiting</button>
-          <button onClick={() => { onChangeStatus(todo, 'isProgress'); onApprove(todo) }}>Move to In Progress</button>
-          <button onClick={() => { onChangeStatus(todo, 'isCompleted'); onApprove(todo) }}>Move to Completed</button>
+          <button onClick={() => { 
+            onChangeStatus(todo, 'isWaiting'); 
+            onApprove(todo) 
+          }}>Move to Waiting</button>
+          <button onClick={() => { 
+            onChangeStatus(todo, 'isProgress'); 
+            onApprove(todo) 
+          }}>Move to In Progress</button>
+          <button onClick={() => { 
+            onChangeStatus(todo, 'isCompleted'); 
+            onApprove(todo) 
+          }}>Move to Completed</button>
           <button onClick={() => onApprove(todo)}>Approve</button>
         </div>
       }

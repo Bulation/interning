@@ -15,7 +15,7 @@ export default function TodoList(props: ITodoListProps) {
             }
             return false;
           })
-          .map((todo) => <li key={todo.id} className="todo">
+          .map((todo) => <li key={todo.id} className={`todo todo_${todoKey}`}>
             <p className='todo__text'>{todo.text}</p>
             <button className="todo__edit-button" onClick={() => editTodo(todo.id)}>Edit</button>
             <button onClick={() => deleteTodo(todo.id)}>Delete</button>
