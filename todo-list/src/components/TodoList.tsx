@@ -10,7 +10,7 @@ export default function TodoList(props: ITodoListProps) {
           .filter((todo) => {
             if (searchValue === '') { 
               return todo;
-            } else if (todo.text.trim().toLowerCase().includes(searchValue)) { //если был поиск по тудушкам и там вписано какое-то значение, то фильтруем тудушки по тому тексту, который соответствует введенному значению
+            } else if (todo.text.trim().toLowerCase().includes(searchValue.trim().toLowerCase())) { //если был поиск по тудушкам и там вписано какое-то значение, то фильтруем тудушки по тому тексту, который соответствует введенному значению
               return todo;
             }
             return false;
