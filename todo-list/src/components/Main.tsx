@@ -1,5 +1,5 @@
 import { IMainProps } from "../interfaces/IMainProps";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ITodo } from "../interfaces/ITodo";
 import TodosSection from "./TodosSection";
 import EditingSection from "./EditingSection";
@@ -15,9 +15,10 @@ export default function Main(props: IMainProps) {
       setTodos(JSON.parse(todosFromStorage));
     }
   }, []); //загружаю тудушки из стореджа при первой загрузке страницы
-  const [todoValue, setTodoValue] = useState(''); //стейт для хранения значения в инпуте создания тудушки
-  const [widthValue, setWidthValue] = useState('25%'); //стейт для хранения значения ширины секции со списком тудушек
-  const submitTodo = (todoValue: string) => { //функция для создания новой тудушки
+  const [todoValue, setTodoValue] = useState(''); //стейт для хранения значения в инпуте, в котором создается тудушка
+  const clientWidth = document.body.clientWidth < 1024 ? '100%' : '25%'; //установление начальной ширины в зависимости от разрешения экрана
+  const [widthValue, setWidthValue] = useState(clientWidth); //стейт для хранения значения ширины секции со списком тудушек
+  const submitTodo = useCallback((todoValue: string) => { //функция для создания новой тудушки
     if (todoValue === '') { //если пользователь пытается создать тудушку с пустым именем, то выходим из функции
       return;
     }
@@ -30,7 +31,7 @@ export default function Main(props: IMainProps) {
     }
     setTodos([...todos, newTodo]);
     setTodoValue(''); //очищаю инпут добавления тудушки
-  }
+  }, [todos]);
   const [editedTodo, setEditedTodo] = useState({ //стейт для хранения тудушки, которую нужно перевести в режим редактирования
     id: '',
     text: '',
@@ -39,14 +40,14 @@ export default function Main(props: IMainProps) {
     isCompleted: false
   });
 
-  const editTodo = (id: string) => { //функция для перевода тудушки в режим редактирования
+  const editTodo = useCallback((id: string) => { //функция для перевода тудушки в режим редактирования
     const todoForEdit = todos.find((todo) => todo.id === id);
     if (todoForEdit) {
       setEditedTodo(todoForEdit);
     }
-  }
+  }, [todos]);
 
-  const deleteTodo = (id: string) => {
+  const deleteTodo = useCallback((id: string) => {
     setTodos(todos.filter((todo) => todo.id !== id));
     if (editedTodo.id === id) { //если удаляемая тудушка находилась в режиме редактирования, то убираем ее оттуда
       setEditedTodo({
@@ -57,9 +58,9 @@ export default function Main(props: IMainProps) {
         isCompleted: false
       })
     }
-  }
+  }, [todos, editedTodo]);
 
-  const onChangeStatus = (todo: ITodo, status: StatusType) => { //функция перевода тудушки из одного статуса в другой
+  const onChangeStatus = useCallback((todo: ITodo, status: StatusType) => { //функция перевода тудушки из одного статуса в другой
     setTodos(todos.map((item) => {
       if (item.id === todo.id) {
         item.isCompleted = false;
@@ -69,9 +70,9 @@ export default function Main(props: IMainProps) {
       }
       return item;
     }));
-  }
+  }, [todos]);
 
-  const onApprove = (todo: ITodo) => {
+  const onApprove = useCallback((todo: ITodo) => {
     setTodos(todos.map((item) => { //меняем текст тудушки и очищаем режим редактирования при сохранении изменения
       if (item.id === todo.id) {
         item.text = todo.text;
@@ -85,14 +86,9 @@ export default function Main(props: IMainProps) {
       isProgress: false,
       isCompleted: false
     });
-  }
-  let mousedown: boolean = false; //переменная для определения, зажата ли кнопка мыши на диве с классом width-changing-slider
-  const isMouseDown = (value: boolean) => {
-    mousedown = value;
-  }
-  window.addEventListener('mousemove', (e) => mousedown && changeWidth(e)); //если зажата кнопка мыши на диве и мышь перемещается, то менеяем ширину секций
+  }, [todos]);
   const mainEl = useRef<HTMLElement>(null); //реф для тега main
-  const changeWidth = (e: MouseEvent) => {
+  const changeWidth = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (mainEl.current) {
       const widthValue = (e.pageX - mainEl.current.getBoundingClientRect().left) / mainEl.current.clientWidth * 100; //значение ширины в процентах для секции списка тудушек
@@ -105,7 +101,6 @@ export default function Main(props: IMainProps) {
       }
     }
   }
-  window.addEventListener('mouseup', () => isMouseDown(false));
   return (
     <main ref={mainEl} className='main'>
       <TodosSection
@@ -118,7 +113,11 @@ export default function Main(props: IMainProps) {
         searchValue={searchValue}
         widthValue={widthValue}
       />
-      <div className="width-changing-slider" style={{ left: widthValue }} onMouseDown={() => isMouseDown(true)}></div>
+      <div draggable="true" className="width-changing-slider" 
+          style={{ left: widthValue }} 
+          onDrag={(e) => changeWidth(e)} 
+          onDragEnd={(e) => changeWidth(e)}>
+      </div>
       <EditingSection
         todo={editedTodo}
         setEditedTodo={setEditedTodo}

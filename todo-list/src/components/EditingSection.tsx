@@ -11,6 +11,9 @@ export default function EditingSection(props: IEditingSectionProps) {
       editingSection.current.style.width = `${100 - parseFloat(widthValue)}%`;
     }
   })
+  if (document.body.clientWidth < 1024 && editingSection.current) { //установка начальной ширины секции
+    editingSection.current.style.width = '100%';
+  }
   return (
     <section ref={editingSection} className="edit-todos" style={{ width: `${100 - parseFloat(widthValue)}%` }}>
       <h2>Edit todo</h2>
